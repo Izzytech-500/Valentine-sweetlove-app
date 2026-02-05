@@ -4,13 +4,19 @@ import { Heart } from "lucide-react";
 import FloatingHearts from "./FloatingHearts";
 import Fireworks from "./Fireworks";
 import PlacesGallery from "./PlacesGallery";
+import HobbiesInterests from "./HobbiesInterests";
+import LovePoems from "./LovePoems";
+import PickupLines from "./PickupLines";
+import SecretAdmirer from "./SecretAdmirer";
+import Navigation from "./Navigation";
 
-type Stage = "question" | "celebration" | "gallery";
+type Stage = "question" | "celebration" | "hobbies" | "poems" | "pickup" | "places" | "admirer";
 
 const ValentineQuestion = () => {
   const [stage, setStage] = useState<Stage>("question");
   const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
   const [noEscapeCount, setNoEscapeCount] = useState(0);
+  const [showNav, setShowNav] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleNoPress = () => {
@@ -22,7 +28,7 @@ const ValentineQuestion = () => {
     const padding = 20;
 
     const maxX = container.width - buttonWidth - padding * 2;
-    const maxY = container.height - buttonHeight - padding * 2 - 200; // Account for content above
+    const maxY = container.height - buttonHeight - padding * 2 - 200;
 
     const newX = Math.random() * maxX - maxX / 2;
     const newY = Math.random() * maxY - maxY / 2 + 50;
@@ -34,8 +40,13 @@ const ValentineQuestion = () => {
   const handleYesPress = () => {
     setStage("celebration");
     setTimeout(() => {
-      setStage("gallery");
+      setStage("hobbies");
+      setShowNav(true);
     }, 4000);
+  };
+
+  const handleNavigate = (section: string) => {
+    setStage(section as Stage);
   };
 
   const getNoButtonText = () => {
@@ -54,8 +65,30 @@ const ValentineQuestion = () => {
     return texts[Math.min(noEscapeCount, texts.length - 1)];
   };
 
-  if (stage === "gallery") {
-    return <PlacesGallery />;
+  const renderContent = () => {
+    switch (stage) {
+      case "hobbies":
+        return <HobbiesInterests onComplete={() => setStage("poems")} />;
+      case "poems":
+        return <LovePoems onComplete={() => setStage("pickup")} />;
+      case "pickup":
+        return <PickupLines onComplete={() => setStage("places")} />;
+      case "places":
+        return <PlacesGallery onComplete={() => setStage("admirer")} />;
+      case "admirer":
+        return <SecretAdmirer />;
+      default:
+        return null;
+    }
+  };
+
+  if (stage !== "question" && stage !== "celebration") {
+    return (
+      <div className="pb-20">
+        {renderContent()}
+        {showNav && <Navigation currentSection={stage} onNavigate={handleNavigate} />}
+      </div>
+    );
   }
 
   return (
@@ -79,7 +112,6 @@ const ValentineQuestion = () => {
             exit={{ opacity: 0, scale: 0.8 }}
             className="text-center z-10"
           >
-            {/* Heart icon */}
             <motion.div
               className="mb-8 inline-block"
               animate={{
@@ -98,7 +130,6 @@ const ValentineQuestion = () => {
               />
             </motion.div>
 
-            {/* Title */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -119,7 +150,6 @@ const ValentineQuestion = () => {
               I promise endless love & adventures 💕
             </motion.p>
 
-            {/* Buttons */}
             <div className="flex flex-col items-center gap-4 relative min-h-[150px]">
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
@@ -219,7 +249,7 @@ const ValentineQuestion = () => {
               transition={{ delay: 1.5 }}
               className="text-muted-foreground mt-4"
             >
-              Let me show you our future adventures...
+              Let's get to know each other better...
             </motion.p>
           </motion.div>
         )}

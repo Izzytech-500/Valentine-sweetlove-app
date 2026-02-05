@@ -5,7 +5,7 @@ import paris from "@/assets/places/paris.jpg";
 import maldives from "@/assets/places/maldives.jpg";
 import iceland from "@/assets/places/iceland.jpg";
 import venice from "@/assets/places/venice.jpg";
-import kyoto from "@/assets/places/kyoto.jpg";
+import tokyo from "@/assets/places/tokyo.jpg";
 
 const places = [
   {
@@ -34,8 +34,8 @@ const places = [
     description: "Glide through enchanted canals on a gondola, serenaded by the whispers of ancient romance.",
   },
   {
-    image: kyoto,
-    name: "Kyoto, Japan",
+    image: tokyo,
+    name: "Tokyo, Japan",
     description: "Walk hand in hand beneath cherry blossoms, where ancient temples guard timeless love stories.",
   },
 ];
